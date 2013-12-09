@@ -119,3 +119,18 @@ source: http://www.gdal.org/ogr/drv_gpx.html
 gdal polygonize
 ---
     gdal_polygonize Project_clip1.tif -f "ESRI Shapefile" vector.shp crit2 Value
+    
+
+iterate over many files linux/unix (source: http://gothos.info/tag/gdal-ogr/)
+---
+
+    #!/bin/bash
+    # from Sherman (2008) Desktop GIS Mapping the Planet With Open Source Tools pp 243-44
+
+    for shp in *.shp
+    do
+    echo “Processing $shp”
+    ogr2ogr -f “ESRI Shapefile” -t_srs EPSG:4326 geo/$shp $shp
+    done
+
+
