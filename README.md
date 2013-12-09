@@ -9,7 +9,11 @@ GDAL Cheat Sheet
 ---------
     
     gdalwarp -s_srs EPSG:4326 -t_srs EPSG:27700 home_wgs84.bmp home_OSGB36.tif
+    
 
+GDAL_warp subset raster with SHP file
+---
+    gdal_warp -cutline shpfile.shp -cwhere "Id = 0" inimage.tif outimage.tif
 
 
 Note that it is usually a good idea to "optimise" the resulting image with gdal_translate.
@@ -103,3 +107,15 @@ Note that it is usually a good idea to "optimise" the resulting image with gdal_
     
     ogr2ogr -where "musym = 'ScA' " ssurgo_ScA.shp ssurgo_utm.shp 
     
+
+source: http://www.gdal.org/ogr/drv_gpx.html
+    
+    ogr2ogr --config GPX_SHORT_NAMES YES out input.gpx track_points
+
+    GPX_SHORT_NAMES YES = converts long column names to shorter names to prevent non-unique names
+    out = is the ouput location and folder
+    track_points = the feature type you are converting/extracting from the file. Other options are: waypoints,     route_points, routes, tracks. If nothing is specified then all are extracted. An empty shp file is created for those with no features.
+    
+gdal polygonize
+---
+    gdal_polygonize Project_clip1.tif -f "ESRI Shapefile" vector.shp crit2 Value
