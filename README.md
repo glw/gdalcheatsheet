@@ -99,10 +99,12 @@ OGR
     ogr2ogr -s_srs "EPSG:4326" -t_srs "EPSG:27700" buildings_OS.shp buildings.shp
 
 
-+ Get information about a shapefile:
++ Get information about a shapefile: (List Fields and type)
 ---
     
-    ogrinfo -al ssurgo_geo.shp
+    ogrinfo -al ssurgo_geo.shp **This Lists ALL geometry which can be a pain
+
+    ogrinfo -al -geom=NO ssurgo_geo.shp **Will not list millions of pages of geometry
 
 
 + Extract all polygons from a SSURGO shapefile where the mapunit symbol is 'ScA':
