@@ -4,8 +4,26 @@ gdal/ogr cheatsheet
 GDAL Cheat Sheet
 (not sure of original sources)
 
++ Compress imagery
+---
+#as seen on http://blog.cleverelephant.ca/2015/02/geotiff-compression-for-dummies.html
 
-+ GDALWARP:
+gdal_translate \
+  -co COMPRESS=JPEG \
+  -co PHOTOMETRIC=YCBCR \
+  -co TILED=YES \
+  5255C.tif 5255C_JPEG_YCBCR.tif
+
+#create overviews
+gdaladdo \
+  --config COMPRESS_OVERVIEW JPEG \
+  --config PHOTOMETRIC_OVERVIEW YCBCR \
+  --config INTERLEAVE_OVERVIEW PIXEL \
+  -r average \
+  5255C_JPEG_YCBCR.tif \
+2 4 8 16
+
++ GDALWARP: *see below for using gdalwarp to merge tifs
 ---
     
     gdalwarp -s_srs EPSG:4326 -t_srs EPSG:27700 home_wgs84.bmp home_OSGB36.tif
@@ -59,6 +77,17 @@ Note that it is usually a good idea to "optimise" the resulting image with gdal_
     
     gdal_merge -o Theale_merged.tif Theale1_cal.bmp Theale2_cal.bmp Theale3_cal.bmp Theale4_cal.bmp
 
++ Alternative Merge Rasters
+---
+#Compress tif
+gdal_translate -of GTiff -co COMPRESS=DEFLATE -co TILED=NO image1.tif image1_compressed.tif
+ 
+#copy all tifs to new location
+for %I in (image1.tif image2.tif image3.tif image4.tif) do copy %I test\folder\
+ 
+#mosaic with gdal
+gdalwarp --config GDAL_CACHEMAX 3000 -wm 3000 *.tif final_mosaic.tif
+---
 
 OGR
 ===
@@ -156,3 +185,5 @@ Same using all SQL
 
     ogrinfo -q city_of_austin_parks.shp -sql "SELECT * FROM city_of_austin_parks WHERE fid IN (1,3)"
 
++ How to process multiple files
+---
