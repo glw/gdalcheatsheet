@@ -151,12 +151,9 @@ source: http://www.gdal.org/ogr/drv_gpx.html
     
     ogr2ogr --config GPX_SHORT_NAMES YES out input.gpx track_points
     
-
-        * GPX_SHORT_NAMES YES = converts long column names to shorter names to prevent non-unique names
-    
-        * out = is the ouput location and folder
-    
-        * track_points = the feature type you are converting/extracting from the file. Other options are: waypoints, route_points, routes, tracks. If nothing is specified then all are extracted. An empty shp file is created for those with no features.
+* GPX_SHORT_NAMES YES = converts long column names to shorter names to prevent non-unique names
+* out = is the ouput location and folder
+* track_points = the feature type you are converting/extracting from the file. Other options are: waypoints, route_points, routes, tracks. If nothing is specified then all are extracted. An empty shp file is created for those with no features.
     
 + gdal polygonize
 ---
