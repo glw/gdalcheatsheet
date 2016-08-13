@@ -79,14 +79,17 @@ Note that it is usually a good idea to "optimise" the resulting image with gdal_
 + Alternative Merge Rasters
 ---
 *Compress tif
+
         gdal_translate -of GTiff -co COMPRESS=DEFLATE -co TILED=NO image1.tif image1_compressed.tif
  
 *copy all tifs to new location
+
         for %I in (image1.tif image2.tif image3.tif image4.tif) \
         do \
         copy %I test\folder\
  
 *mosaic with gdal
+
         gdalwarp --config GDAL_CACHEMAX 3000 -wm 3000 *.tif final_mosaic.tif
 
 ---
@@ -148,9 +151,11 @@ source: http://www.gdal.org/ogr/drv_gpx.html
     
     ogr2ogr --config GPX_SHORT_NAMES YES out input.gpx track_points
 
-    GPX_SHORT_NAMES YES = converts long column names to shorter names to prevent non-unique names
-    out = is the ouput location and folder
-    track_points = the feature type you are converting/extracting from the file. Other options are: waypoints,     route_points, routes, tracks. If nothing is specified then all are extracted. An empty shp file is created for those with no features.
+        *GPX_SHORT_NAMES YES = converts long column names to shorter names to prevent non-unique names
+    
+        *out = is the ouput location and folder
+    
+        *track_points = the feature type you are converting/extracting from the file. Other options are: waypoints, route_points, routes, tracks. If nothing is specified then all are extracted. An empty shp file is created for those with no features.
     
 + gdal polygonize
 ---
