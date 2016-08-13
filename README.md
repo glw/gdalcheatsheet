@@ -2,35 +2,26 @@ gdal/ogr cheatsheet
 ===
 
 GDAL Cheat Sheet
-(not sure of original sources)
 
 + Compress imagery
 ---
-as seen on http://blog.cleverelephant.ca/2015/02/geotiff-compression-for-dummies.html
+*as seen on http://blog.cleverelephant.ca/2015/02/geotiff-compression-for-dummies.html
 
-gdal_translate \
+    gdal_translate \
+    -co COMPRESS=JPEG \
+    -co PHOTOMETRIC=YCBCR \
+    -co TILED=YES \
+    5255C.tif 5255C_JPEG_YCBCR.tif
 
-  -co COMPRESS=JPEG \
-  
-  -co PHOTOMETRIC=YCBCR \
-  
-  -co TILED=YES \
-  
-  5255C.tif 5255C_JPEG_YCBCR.tif
+*create overviews
 
-#create overviews
-gdaladdo \
-  --config COMPRESS_OVERVIEW JPEG \
-  
-  --config PHOTOMETRIC_OVERVIEW YCBCR \
-  
-  --config INTERLEAVE_OVERVIEW PIXEL \
-  
-  -r average \
-  
-  5255C_JPEG_YCBCR.tif \
-  
-  2 4 8 16
+    gdaladdo \
+    --config COMPRESS_OVERVIEW JPEG \
+    --config PHOTOMETRIC_OVERVIEW YCBCR \
+    --config INTERLEAVE_OVERVIEW PIXEL \
+    -r average \
+    5255C_JPEG_YCBCR.tif \
+    2 4 8 16
 
 + GDALWARP: *see below for using gdalwarp to merge tifs
 ---
@@ -38,9 +29,9 @@ gdaladdo \
     gdalwarp -s_srs EPSG:4326 -t_srs EPSG:27700 home_wgs84.bmp home_OSGB36.tif
     
 
-GDAL_warp subset raster with SHP file
+GDALwarp subset raster with SHP file
 ---
-    gdal_warp -cutline shpfile.shp -cwhere "Id = 0" inimage.tif outimage.tif
+    gdalwarp -cutline shpfile.shp -cwhere "Id = 0" inimage.tif outimage.tif
 
 
 Note that it is usually a good idea to "optimise" the resulting image with gdal_translate.
@@ -88,14 +79,17 @@ Note that it is usually a good idea to "optimise" the resulting image with gdal_
 
 + Alternative Merge Rasters
 ---
-#Compress tif
-gdal_translate -of GTiff -co COMPRESS=DEFLATE -co TILED=NO image1.tif image1_compressed.tif
+*Compress tif
+    gdal_translate -of GTiff -co COMPRESS=DEFLATE -co TILED=NO image1.tif image1_compressed.tif
  
-#copy all tifs to new location
-for %I in (image1.tif image2.tif image3.tif image4.tif) do copy %I test\folder\
+*copy all tifs to new location
+    for %I in (image1.tif image2.tif image3.tif image4.tif) \
+    do \
+    copy %I test\folder\
  
-#mosaic with gdal
-gdalwarp --config GDAL_CACHEMAX 3000 -wm 3000 *.tif final_mosaic.tif
+*mosaic with gdal
+    gdalwarp --config GDAL_CACHEMAX 3000 -wm 3000 *.tif final_mosaic.tif
+
 ---
 
 OGR
@@ -170,11 +164,11 @@ source: http://www.gdal.org/ogr/drv_gpx.html
     #!/bin/bash
     # from Sherman (2008) Desktop GIS Mapping the Planet With Open Source Tools pp 243-44
 
-    for shp in *.shp
-    do
-    echo “Processing $shp”
-    ogr2ogr -f “ESRI Shapefile” -t_srs EPSG:4326 geo/$shp $shp
-    done
+    for shp in *.shp \
+    do \
+    echo “Processing $shp” \
+    ogr2ogr -f “ESRI Shapefile” -t_srs EPSG:4326 geo/$shp $shp \
+    done \
 
 + Ogr with SQL
 ---
@@ -194,5 +188,3 @@ Same using all SQL
 
     ogrinfo -q city_of_austin_parks.shp -sql "SELECT * FROM city_of_austin_parks WHERE fid IN (1,3)"
 
-+ How to process multiple files
----
