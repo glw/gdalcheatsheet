@@ -5,7 +5,7 @@ GDAL Cheat Sheet
 
 + Compress imagery
 ---
-*as seen on http://blog.cleverelephant.ca/2015/02/geotiff-compression-for-dummies.html
+* as seen on http://blog.cleverelephant.ca/2015/02/geotiff-compression-for-dummies.html
 
     gdal_translate \
     -co COMPRESS=JPEG \
@@ -13,7 +13,7 @@ GDAL Cheat Sheet
     -co TILED=YES \
     5255C.tif 5255C_JPEG_YCBCR.tif
 
-*create overviews
+* create overviews
 
     gdaladdo \
     --config COMPRESS_OVERVIEW JPEG \
@@ -34,7 +34,7 @@ GDALwarp subset raster with SHP file
     gdalwarp -cutline shpfile.shp -cwhere "Id = 0" inimage.tif outimage.tif
 
 
-Note that it is usually a good idea to "optimise" the resulting image with gdal_translate.
+* Note that it is usually a good idea to "optimise" the resulting image with gdal_translate.
 
 + Convert Multi-band GeoTiff file to JPEG:
 ---
@@ -78,17 +78,17 @@ Note that it is usually a good idea to "optimise" the resulting image with gdal_
 
 + Alternative Merge Rasters
 ---
-*Compress tif
+* Compress tif
 
         gdal_translate -of GTiff -co COMPRESS=DEFLATE -co TILED=NO image1.tif image1_compressed.tif
  
-*copy all tifs to new location
+* copy all tifs to new location
 
         for %I in (image1.tif image2.tif image3.tif image4.tif) \
         do \
         copy %I test\folder\
  
-*mosaic with gdal
+* mosaic with gdal
 
         gdalwarp --config GDAL_CACHEMAX 3000 -wm 3000 *.tif final_mosaic.tif
 
@@ -150,12 +150,13 @@ OGR
 source: http://www.gdal.org/ogr/drv_gpx.html
     
     ogr2ogr --config GPX_SHORT_NAMES YES out input.gpx track_points
+    
 
-        *GPX_SHORT_NAMES YES = converts long column names to shorter names to prevent non-unique names
+        * GPX_SHORT_NAMES YES = converts long column names to shorter names to prevent non-unique names
     
-        *out = is the ouput location and folder
+        * out = is the ouput location and folder
     
-        *track_points = the feature type you are converting/extracting from the file. Other options are: waypoints, route_points, routes, tracks. If nothing is specified then all are extracted. An empty shp file is created for those with no features.
+        * track_points = the feature type you are converting/extracting from the file. Other options are: waypoints, route_points, routes, tracks. If nothing is specified then all are extracted. An empty shp file is created for those with no features.
     
 + gdal polygonize
 ---
