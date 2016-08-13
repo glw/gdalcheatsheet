@@ -146,7 +146,8 @@ OGR
     
     ogr2ogr -where "musym = 'ScA' " ssurgo_ScA.shp ssurgo_utm.shp 
     
-
++ GPX files
+---
 source: http://www.gdal.org/ogr/drv_gpx.html
     
     ogr2ogr --config GPX_SHORT_NAMES YES out input.gpx track_points
