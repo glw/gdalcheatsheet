@@ -6,22 +6,31 @@ GDAL Cheat Sheet
 
 + Compress imagery
 ---
-#as seen on http://blog.cleverelephant.ca/2015/02/geotiff-compression-for-dummies.html
+as seen on http://blog.cleverelephant.ca/2015/02/geotiff-compression-for-dummies.html
 
 gdal_translate \
+
   -co COMPRESS=JPEG \
+  
   -co PHOTOMETRIC=YCBCR \
+  
   -co TILED=YES \
+  
   5255C.tif 5255C_JPEG_YCBCR.tif
 
 #create overviews
 gdaladdo \
   --config COMPRESS_OVERVIEW JPEG \
+  
   --config PHOTOMETRIC_OVERVIEW YCBCR \
+  
   --config INTERLEAVE_OVERVIEW PIXEL \
+  
   -r average \
+  
   5255C_JPEG_YCBCR.tif \
-2 4 8 16
+  
+  2 4 8 16
 
 + GDALWARP: *see below for using gdalwarp to merge tifs
 ---
