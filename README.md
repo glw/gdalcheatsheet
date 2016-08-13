@@ -63,32 +63,31 @@ Note that it is usually a good idea to "optimise" the resulting image with gdal_
 + MERGE DEMs (DEM tiffs):
 ---
     
-    gdal_merge srtm_35_01.tif srtm_35_02.tif srtm_35_03.tif srtm_36_01.tif srtm_36_02.tif srtm_37_02.tif -o merged_DEM.tif
+        gdal_merge srtm_35_01.tif srtm_35_02.tif srtm_35_03.tif srtm_36_01.tif srtm_36_02.tif srtm_37_02.tif -o merged_DEM.tif
 
 
 + SUBSET DEMs (DEM tiffs):
 ---
     
-    gdalwarp -te -7.35 48.48 3.79 59.51 merged_DEM.tif subset_DEM.tif
+        gdalwarp -te -7.35 48.48 3.79 59.51 merged_DEM.tif subset_DEM.tif
 
 
 + MERGE RASTERS:
 ---
-    
-    gdal_merge -o Theale_merged.tif Theale1_cal.bmp Theale2_cal.bmp Theale3_cal.bmp Theale4_cal.bmp
+        gdal_merge -o Theale_merged.tif Theale1_cal.bmp Theale2_cal.bmp Theale3_cal.bmp Theale4_cal.bmp
 
 + Alternative Merge Rasters
 ---
 *Compress tif
-    gdal_translate -of GTiff -co COMPRESS=DEFLATE -co TILED=NO image1.tif image1_compressed.tif
+        gdal_translate -of GTiff -co COMPRESS=DEFLATE -co TILED=NO image1.tif image1_compressed.tif
  
 *copy all tifs to new location
-    for %I in (image1.tif image2.tif image3.tif image4.tif) \
-    do \
-    copy %I test\folder\
+        for %I in (image1.tif image2.tif image3.tif image4.tif) \
+        do \
+        copy %I test\folder\
  
 *mosaic with gdal
-    gdalwarp --config GDAL_CACHEMAX 3000 -wm 3000 *.tif final_mosaic.tif
+        gdalwarp --config GDAL_CACHEMAX 3000 -wm 3000 *.tif final_mosaic.tif
 
 ---
 
