@@ -81,6 +81,9 @@ GDALwarp subset raster with SHP file
 * Compress tif
 
         gdal_translate -of GTiff -co COMPRESS=DEFLATE -co TILED=NO image1.tif image1_compressed.tif
+        
+        
+        optional argument to resize image -outsize 50% 50%
  
 * copy all tifs to new location
 
