@@ -38,7 +38,9 @@ GDALwarp subset raster with SHP file
 
 * if GDAL complains about strange tags used in a tif file (http://www.gdal.org/frmt_gtiff.html):
 
+
     gdal_translate -co < PROFILE=BASELINE > or <PROFILE=GeoTIFF> input.tif output.tif 
+
 
 + Convert Multi-band GeoTiff file to JPEG:
 ---
