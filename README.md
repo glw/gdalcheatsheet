@@ -22,6 +22,16 @@ GDAL Cheat Sheet
         -r average \
         5255C_JPEG_YCBCR.tif \
         2 4 8 16
+        
+* Compress a bunch of tifs...
+
+        for FILE in *.tif
+        do
+        BASE=`basename $FILE .tif`
+        NEWFILE=${BASE}_c.tif
+        gdal_translate -b 1 -b 2 -b 3 -co COMPRESS=JPEG -co TILED=YES -co PHOTOMETRIC=YCBCR $FILE $NEWFILE
+        done
+        
 
 + GDALWARP: *see below for using gdalwarp to merge tifs
 ---
