@@ -3,8 +3,9 @@ gdal/ogr cheatsheet
 
 GDAL Cheat Sheet
 
-+ Compress imagery
 ---
++ Compress imagery
+
 as seen on http://blog.cleverelephant.ca/2015/02/geotiff-compression-for-dummies.html
 
         gdal_translate \
