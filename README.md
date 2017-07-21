@@ -127,23 +127,27 @@ Merge DEMs
 Merge Rasters:
 
         gdal_merge -o Theale_merged.tif Theale1_cal.bmp Theale2_cal.bmp Theale3_cal.bmp Theale4_cal.bmp
-        
- 
+   
+   
+--- 
 Copy all tifs to new location
 
         for %I in (image1.tif image2.tif image3.tif image4.tif) \
         do \
         copy %I test\folder\
-        
+
+
+---
 + gdal2tiles - Create web map tiles
 
         gdal2tiles.py --zoom=11-15 --title=maptitle in.tif output_folder_name
-        
+
+---
 + gdal polygonize
 
         gdal_polygonize Project_clip1.tif -f "ESRI Shapefile" vector.shp crit2 Value
         
-        
+---        
 + gdal calc
   source: http://www.gdal.org/gdal_calc.html
   
@@ -247,7 +251,7 @@ source: http://www.gdal.org/ogr/drv_gpx.html
 
 
     #!/bin/bash
-    # from Sherman (2008) Desktop GIS Mapping the Planet With Open Source Tools pp 243-44
+    from Sherman (2008) Desktop GIS Mapping the Planet With Open Source Tools pp 243-44
 
     for shp in *.shp \
     do \
