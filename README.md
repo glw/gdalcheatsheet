@@ -35,6 +35,7 @@ Compress a bunch of tifs...
         gdal_translate -b 1 -b 2 -b 3 -co COMPRESS=JPEG -co TILED=YES -co PHOTOMETRIC=YCBCR $FILE $NEWFILE
         done
    
+                
    
    
 ---
@@ -47,10 +48,6 @@ Compress a bunch of tifs...
 Crops image based on shapefile select polygon using -cwhere
     
         gdalwarp -cutline shpfile.shp -cwhere "fieldname = 'fieldvalue'" -crop_to_cutline inimage.tif outimage.tif
-         
-                * options:
-                -cblend <pixels> to feather eadges of imagery for a better seamless image
-                -multi to multi-threaded processing
                 
    
 Mask raster to cutline, use NO_GEOTRANSFORM for un-georeferenced images
@@ -63,6 +60,8 @@ Mask raster to cutline, use NO_GEOTRANSFORM for un-georeferenced images
     
                 * options:
                 -dstalpha to create an alpha band, masking nodata pixels
+                -cblend <pixels> to feather eadges of imagery for a better seamless image
+                -multi to multi-threaded processing
     
     
 Subset with -te 
@@ -90,6 +89,7 @@ Compress tif
         gdal_translate -of GTiff -co COMPRESS=DEFLATE -co TILED=NO image1.tif image1_compressed.tif
         
         * optional argument to resize image -outsize 50% 50%
+        *for GEOTIFF compression option -co NUM_THREADS=ALL_CPUS is available for better preformance
         
 
 Convert Multi-band GeoTiff file to JPEG:
