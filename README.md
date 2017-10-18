@@ -16,6 +16,12 @@ as seen on http://blog.cleverelephant.ca/2015/02/geotiff-compression-for-dummies
         -co TILED=YES \
         5255C.tif 5255C_JPEG_YCBCR.tif
 
+
+    * If dealing with IR bands the recommended options are -co PHOTOMETRIC=RGB -co ALPHA=NO
+    source: https://lists.osgeo.org/pipermail/gdal-dev/2011-April/028455.html
+    With these 2 options you should get the 4th band defined as 'Undefined'. Otherwise you get a 4th band defined as Alpha.
+
+
 Create overviews
 
         gdaladdo \
