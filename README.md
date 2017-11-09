@@ -287,9 +287,33 @@ Same using all SQL
 
     ogrinfo -q city_of_austin_parks.shp -sql "SELECT * FROM city_of_austin_parks WHERE fid IN (1,3)"
 
-
 ---
-Using OGR with GNU Parallel 
+
++ Import into Postgis (from PostGIS Cookbook, 2014)
+
+        ogr2ogr -f PostgreSQL -sql "SELECT ISO2, NAME AS country_name \
+        FROM 'TM_WORLD_BORDERS-0.3' WHERE REGION=2" \
+        -nlt MULTIPOLYGON \
+        PG:"dbname='postgis_cookbook' user='me' password='mypassword'" \
+        -nln africa_countries \
+        -lco SCHEMA=chp01 \
+        -lco GEOMETRY_NAME=the_geom \
+        TM_WORLD_BORDERS-0.3.shp
+
++ Export from Postgis (from PostGIS Cookbook, 2014)
+
+        ogr2ogr -f GeoJSON -t_srs EPSG:4326 warmest_hs.geojson \
+        PG:"dbname='postgis_cookbook' user='me' password='mypassword'" \
+        -sql "SELECT f.the_geom as the_geom, f.bright_t31, ac.iso2, ac.country_name \
+        FROM chp01.global_24h as f \
+        JOIN chp01.africa_countries as ac \
+        ON ST_Contains(ac.the_geom, ST_Transform(f.the_geom, 4326)) \
+        ORDER BY f.bright_t31 DESC LIMIT 100"
+        
+---
+
++ Using OGR with GNU Parallel 
+
 Source:http://blog.faraday.io/how-to-crunch-lots-of-geodata-in-parallel/
     
     mkdir wgs84  
