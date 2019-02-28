@@ -51,12 +51,12 @@ Compress a bunch of tifs...
         gdalwarp -s_srs EPSG:4326 -t_srs EPSG:27700 home_wgs84.bmp home_OSGB36.tif
     
    
-Crops image based on shapefile select polygon using -cwhere
+  Crops image based on shapefile select polygon using -cwhere
     
         gdalwarp -cutline shpfile.shp -cwhere "fieldname = 'fieldvalue'" -crop_to_cutline inimage.tif outimage.tif
                 
    
-Mask raster to cutline, use NO_GEOTRANSFORM for un-georeferenced images
+  Mask raster to cutline, use NO_GEOTRANSFORM for un-georeferenced images
     
         gdalwarp -to SRC_METHOD=NO_GEOTRANSFORM -to DST_METHOD=NO_GEOTRANSFORM -cutline cut_line.csv in.tif out.tif
 
@@ -70,17 +70,17 @@ Mask raster to cutline, use NO_GEOTRANSFORM for un-georeferenced images
                 -multi to multi-threaded processing
     
     
-Subset with -te 
+  Subset with -te 
     
         gdalwarp -te -7.35 48.48 3.79 59.51 merged_DEM.tif subset_DEM.tif
         
     
-Mosaic with gdal
+  Mosaic with gdal
 
         gdalwarp --config GDAL_CACHEMAX 3000 -wm 3000 *.tif final_mosaic.tif
 
 
-* Note that it is usually a good idea to "optimise" the resulting image with gdal_translate.
+  * Note that it is usually a good idea to "optimise" the resulting image with gdal_translate.
         
 
 
@@ -89,7 +89,7 @@ Mosaic with gdal
 + gdal_translate
 
 
-Compress tif
+  Compress tif
         
 
         gdal_translate -of GTiff -co COMPRESS=DEFLATE -co TILED=NO image1.tif image1_compressed.tif
@@ -98,16 +98,20 @@ Compress tif
         *for GEOTIFF compression option -co NUM_THREADS=ALL_CPUS is available for better preformance
         
 
-Convert Multi-band GeoTiff file to JPEG:
+  Convert Multi-band GeoTiff file to JPEG:
 
 
         gdal_translate -of JPEG 884084-utm.tif 884084-utm.jpg 
 
 
-If GDAL complains about strange tags used in a tif file (http://www.gdal.org/frmt_gtiff.html)
+  If GDAL complains about strange tags used in a tif file (http://www.gdal.org/frmt_gtiff.html)
 
         
         gdal_translate -co < PROFILE=BASELINE > or <PROFILE=GeoTIFF> input.tif output.tif
+        
+  Save a single band from a multi-band image
+
+       gdal_translate -b 1 input7.tif output.tif
    
    
    
@@ -125,18 +129,18 @@ If GDAL complains about strange tags used in a tif file (http://www.gdal.org/frm
 + gdal_merge
 
     
-Merge DEMs
+  Merge DEMs
 
         gdal_merge srtm_35_01.tif srtm_35_02.tif srtm_35_03.tif srtm_36_01.tif srtm_36_02.tif srtm_37_02.tif -o merged_DEM.tif
 
 
-Merge Rasters:
+  Merge Rasters:
 
         gdal_merge -o Theale_merged.tif Theale1_cal.bmp Theale2_cal.bmp Theale3_cal.bmp Theale4_cal.bmp
    
    
 --- 
-Copy all tifs to new location
+  Copy all tifs to new location
 
         for %I in (image1.tif image2.tif image3.tif image4.tif) \
         do \
@@ -242,13 +246,13 @@ OGR
     
 ---    
 + GPX files
-source: http://www.gdal.org/ogr/drv_gpx.html
+  source: http://www.gdal.org/ogr/drv_gpx.html
     
       ogr2ogr --config GPX_SHORT_NAMES YES out input.gpx track_points
     
-* GPX_SHORT_NAMES YES = converts long column names to shorter names to prevent non-unique names
-* out = is the ouput location and folder
-* track_points = the feature type you are converting/extracting from the file. Other options are: waypoints, route_points, routes, tracks. If nothing is specified then all are extracted. An empty shp file is created for those with no features.
+  * GPX_SHORT_NAMES YES = converts long column names to shorter names to prevent non-unique names
+  * out = is the ouput location and folder
+  * track_points = the feature type you are converting/extracting from the file. Other options are: waypoints, route_points, routes,     tracks. If nothing is specified then all are extracted. An empty shp file is created for those with no features.
     
 
 
@@ -269,21 +273,21 @@ source: http://www.gdal.org/ogr/drv_gpx.html
 ---
 + Ogr with SQL
 
-source: http://www.sarasafavi.com/intro-to-ogr-part-i-exploring-data.html
+  source: http://www.sarasafavi.com/intro-to-ogr-part-i-exploring-data.html
 
     ogrinfo city_of_austin_parks.shp -sql "SELECT COUNT(*) FROM city_of_austin_parks"
     
     * add '-so' for summary only 
 
 
-SQL and look at only one feature
+  SQL and look at only one feature
     
     ogrinfo -q city_of_austin_parks.shp -sql "SELECT * FROM city_of_austin_parks" -fid 1
     
     * '-q' = quiet
 
 
-Same using all SQL
+  Same using all SQL
 
     ogrinfo -q city_of_austin_parks.shp -sql "SELECT * FROM city_of_austin_parks WHERE fid IN (1,3)"
 
@@ -314,7 +318,7 @@ Same using all SQL
 
 + Using OGR with GNU Parallel 
 
-Source:http://blog.faraday.io/how-to-crunch-lots-of-geodata-in-parallel/
+  Source:http://blog.faraday.io/how-to-crunch-lots-of-geodata-in-parallel/
     
     mkdir wgs84  
     ls *.shp | parallel ogr2ogr -t_srs 'EPSG:4326' wgs84/{} {} 
