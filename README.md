@@ -2,7 +2,6 @@
 
 ## GDAL
 
----
 + Compress imagery
 
 as seen on http://blog.cleverelephant.ca/2015/02/geotiff-compression-for-dummies.html
@@ -170,15 +169,11 @@ Compress a bunch of tifs...
   
         Average 2 bands together
         gdal_calc.py -A input.tif -B input2.tif --outfile=result.tif --calc="(A+B)/2"
-    
 
-
+---
 
 
 ## OGR
-===
-
-
 
 + SUBSET SHAPEFILE:
 
