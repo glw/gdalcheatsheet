@@ -34,12 +34,12 @@ Create overviews
         
 Compress a bunch of tifs...
 
-        for FILE in *.tif
-        do
-        BASE=`basename $FILE .tif`
-        NEWFILE=${BASE}_c.tif
-        gdal_translate -b 1 -b 2 -b 3 -co COMPRESS=JPEG -co TILED=YES -co PHOTOMETRIC=YCBCR $FILE $NEWFILE
-        done
+        for FILE in *.tif \
+        do \
+        BASE=`basename $FILE .tif` \
+        NEWFILE=${BASE}_c.tif \
+        gdal_translate -b 1 -b 2 -b 3 -co COMPRESS=JPEG -co TILED=YES -co PHOTOMETRIC=YCBCR $FILE $NEWFILE \
+        done \
    
                 
    
