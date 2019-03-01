@@ -1,9 +1,8 @@
-gdal/ogr cheatsheet
+# gdal/ogr cheatsheet
+
 ===
 
-GDAL Cheat Sheet
-
-
+## GDAL
 
 ---
 + Compress imagery
@@ -134,16 +133,19 @@ Compress a bunch of tifs...
 
 ---
 + gdal_merge
-
     
   Merge DEMs
 
         gdal_merge srtm_35_01.tif srtm_35_02.tif srtm_35_03.tif srtm_36_01.tif srtm_36_02.tif srtm_37_02.tif -o merged_DEM.tif
 
-
   Merge Rasters:
 
         gdal_merge -o Theale_merged.tif Theale1_cal.bmp Theale2_cal.bmp Theale3_cal.bmp Theale4_cal.bmp
+        
+  Merge Separate Bands into a single file: (band order matters) 
+  source: (https://medium.com/planet-stories/a-gentle-introduction-to-gdal-part-4-working-with-satellite-data-d3835b5e2971)
+  
+        gdal_merge.py -o final_image.tif -separate image_B4.TIF iamge_B3.TIF image_B2.TIF -co PHOTOMETRIC=RGB -co COMPRESS=DEFLATE
    
    
 --- 
@@ -175,7 +177,7 @@ Compress a bunch of tifs...
 
 
 
-OGR
+## OGR
 ===
 
 
