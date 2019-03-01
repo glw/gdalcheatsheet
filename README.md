@@ -1,7 +1,5 @@
 # gdal/ogr cheatsheet
 
-===
-
 ## GDAL
 
 ---
