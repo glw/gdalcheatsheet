@@ -113,7 +113,14 @@ Compress a bunch of tifs...
 
        gdal_translate -b 1 input7.tif output.tif
    
-   
+  Re-order bands 
+    source: https://medium.com/planet-stories/a-gentle-introduction-to-gdal-part-4-working-with-satellite-data-d3835b5e2971
+ 
+       # 5 band image to 3 band RGB image \
+       gdal_translate 1155205_2017-03-31_RE3_3A.tif \
+       1155205_2017-03-31_RE3_3A_rgb.tif \
+       -b 3 -b 2 -b 1 \
+       -co COMPRESS=DEFLATE -co PHOTOMETRIC=RGB
    
    
 ---
