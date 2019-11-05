@@ -2,7 +2,26 @@
 
 ## GDAL
 
-+ Compress imagery
+#### Cloud Optimized GeoTif - [COG](https://www.cogeo.org/)
+
+    gdal_translate in.tif out.tif -co TILED=YES -co COPY_SRC_OVERVIEWS=YES -co COMPRESS=LZW
+    
+- gdaladdo should be run before to create internal overviews
+
+Source: https://trac.osgeo.org/gdal/wiki/CloudOptimizedGeoTIFF#HowtogenerateitwithGDAL
+
+alternatively use ```-of COG``` :
+
+    gdal_translate world.tif world_webmerc_cog.tif -of COG -co TILING_SCHEME=GoogleMapsCompatible -co COMPRESS=JPEG
+    
+Source: https://gdal.org/drivers/raster/cog.html
+    
+*as of GDAL>=2.4 [WebP](https://gdal.org/drivers/raster/webp.html) seems to be the best compression available, 
+ although it seem QGIS 3.4 (GDAL 2.2.2, released 2017/09/15) does not read this type of compression yet
+
+    -CO COMPRESS=WEBP
+
+#### Compress imagery
 
 as seen on http://blog.cleverelephant.ca/2015/02/geotiff-compression-for-dummies.html
 
@@ -10,6 +29,7 @@ as seen on http://blog.cleverelephant.ca/2015/02/geotiff-compression-for-dummies
         -co COMPRESS=JPEG \
         -co PHOTOMETRIC=YCBCR \
         -co TILED=YES \
+        -co BIGTIFF=YES \
         5255C.tif 5255C_JPEG_YCBCR.tif
 
 
@@ -41,17 +61,16 @@ Compress a bunch of tifs...
    
    
 ---
-+ GDALWARP: *see below for using gdalwarp to merge tifs
+#### GDALWARP: 
 
+*see below for using gdalwarp to merge tifs
     
         gdalwarp -s_srs EPSG:4326 -t_srs EPSG:27700 home_wgs84.bmp home_OSGB36.tif
-    
    
   Crops image based on shapefile select polygon using -cwhere
     
         gdalwarp -cutline shpfile.shp -cwhere "fieldname = 'fieldvalue'" -crop_to_cutline inimage.tif outimage.tif
                 
-   
   Mask raster to cutline, use NO_GEOTRANSFORM for un-georeferenced images
     
         gdalwarp -to SRC_METHOD=NO_GEOTRANSFORM -to DST_METHOD=NO_GEOTRANSFORM -cutline cut_line.csv in.tif out.tif
@@ -78,15 +97,22 @@ Compress a bunch of tifs...
 
   * Note that it is usually a good idea to "optimise" the resulting image with gdal_translate.
         
+ #### gdalbuildvrt
+ 
+       gdalbuildvrt -input_file_list newfile output.vrt
 
+ then create overviews
+ 
+      gdaladdo -ro --config COMPRESS_OVERVIEW JPEG --config PHOTOMETRIC_OVERVIEW YCBCR --config INTERLEAVE_OVERVIEW PIXEL --config BIGTIFF_OVERVIEW YES output.vrt 2 4 8 16
+ 
+ * prepend ```/vsicurl/``` to your COG url in S3 to create VRT - https://www.cogeo.org/qgis-tutorial.html
 
 
 ---
-+ gdal_translate
+#### gdal_translate
 
 
   Compress tif
-        
 
         gdal_translate -of GTiff -co COMPRESS=DEFLATE -co TILED=NO image1.tif image1_compressed.tif
         
@@ -120,7 +146,7 @@ Compress a bunch of tifs...
    
    
 ---
-+ gdal_contour:
+#### gdal_contour:
 
     
        gdal_contour -a elev dem.tif contour.shp -i 10.0
@@ -129,7 +155,7 @@ Compress a bunch of tifs...
 
 
 ---
-+ gdal_merge
+#### gdal_merge
     
   Merge DEMs
 
@@ -154,17 +180,17 @@ Compress a bunch of tifs...
 
 
 ---
-+ gdal2tiles - Create web map tiles
+#### gdal2tiles - Create web map tiles
 
         gdal2tiles.py --zoom=11-15 --title=maptitle in.tif output_folder_name
 
 ---
-+ gdal polygonize
+#### gdal polygonize
 
         gdal_polygonize Project_clip1.tif -f "ESRI Shapefile" vector.shp crit2 Value
         
 ---        
-+ gdal calc
+#### gdal calc
   source: http://www.gdal.org/gdal_calc.html
   
         Average 2 bands together
@@ -176,63 +202,63 @@ Compress a bunch of tifs...
 
 ## OGR
 
-+ SUBSET SHAPEFILE:
+#### SUBSET SHAPEFILE:
 
     
        ogr2ogr -spat -1.5 51 -0.5 52 -f "ESRI Shapefile" watersubset.shp waterways.shp
 
 
 ---
-+ MEND SHAPEFILE:
+#### MEND SHAPEFILE:
 
 
        ogr2ogr -skipfailures -f "ESRI Shapefile" mended.shp broken.shp
 
 
 ---
-+ KML to SHP:
+#### KML to SHP:
 
     
        ogr2ogr -f "ESRI Shapefile" thames.shp thames.kml
 
 
 ---
-+ CONVERT SHAPE TO KML and change proj:
+#### CONVERT SHAPE TO KML and change proj:
 
     
        ogr2ogr -f "KML" -s_srs "EPSG:27700" -t_srs  "EPSG:4326" rail.kml rail_OSGB36.shp
 
 
 ---
-+ Convert shp to kml w/ descriptions:
+#### Convert shp to kml w/ descriptions:
 
     
        ogr2ogr -f "KML" sample.kml sample.shp -dsco NameField=Field1 -dsco DescriptionField=field2
 
 
 ---
-+ Convert shp to kml - using "where" as query featuures:
+#### Convert shp to kml - using "where" as query featuures:
 
     
        ogr2ogr -f "KML" -where "NBRHOOD='Telegraph Hill'" realtor_neighborhoods.kml realtor_neighborhoods.shp
 
 
 ---
-+ Convert shp to kml - using "select" to add specific attributes:
+#### Convert shp to kml - using "select" to add specific attributes:
 
     
        ogr2ogr –SELECT “field1 field2 field3” -t_srs EPSG:4326 -f "KML" outPutFileName.kml inPutFileName.shp
 
 
 ---
-+ REPROJECT SHAPE FILE:
+#### REPROJECT SHAPE FILE:
 
     
        ogr2ogr -s_srs "EPSG:4326" -t_srs "EPSG:27700" buildings_OS.shp buildings.shp
 
 
 ---
-+ Get information about a shapefile: (List Fields and type)
+#### Get information about a shapefile: (List Fields and type)
 
     
       ogrinfo -al ssurgo_geo.shp **This Lists ALL geometry which can be a pain
@@ -241,14 +267,14 @@ Compress a bunch of tifs...
 
 
 ---
-+ Extract all polygons from a SSURGO shapefile where the mapunit symbol is 'ScA':
+#### Extract all polygons from a SSURGO shapefile where the mapunit symbol is 'ScA':
 
     
       ogr2ogr -where "musym = 'ScA' " ssurgo_ScA.shp ssurgo_utm.shp 
     
     
 ---    
-+ GPX files
+#### GPX files
   source: http://www.gdal.org/ogr/drv_gpx.html
     
       ogr2ogr --config GPX_SHORT_NAMES YES out input.gpx track_points
@@ -260,7 +286,7 @@ Compress a bunch of tifs...
 
 
 ---
-+ iterate over many files linux/unix (source: http://gothos.info/tag/gdal-ogr/)
+#### iterate over many files linux/unix (source: http://gothos.info/tag/gdal-ogr/)
 
 
     #!/bin/bash
@@ -274,7 +300,7 @@ Compress a bunch of tifs...
 
 
 ---
-+ Ogr with SQL
+#### Ogr with SQL
 
   source: http://www.sarasafavi.com/intro-to-ogr-part-i-exploring-data.html
 
@@ -296,7 +322,7 @@ Compress a bunch of tifs...
 
 ---
 
-+ Import into Postgis (from PostGIS Cookbook, 2014)
+#### Import into Postgis (from PostGIS Cookbook, 2014)
 
         ogr2ogr -f PostgreSQL -sql "SELECT ISO2, NAME AS country_name \
         FROM 'TM_WORLD_BORDERS-0.3' WHERE REGION=2" \
@@ -307,7 +333,7 @@ Compress a bunch of tifs...
         -lco GEOMETRY_NAME=the_geom \
         TM_WORLD_BORDERS-0.3.shp
 
-+ Export from Postgis (from PostGIS Cookbook, 2014)
+#### Export from Postgis (from PostGIS Cookbook, 2014)
 
         ogr2ogr -f GeoJSON -t_srs EPSG:4326 warmest_hs.geojson \
         PG:"host=000.000.000.000 dbname='postgis_cookbook' user='me' password='mypassword'" \
@@ -319,7 +345,7 @@ Compress a bunch of tifs...
         
 ---
 
-+ Using OGR with GNU Parallel 
+#### Using OGR with GNU Parallel 
 
   Source:http://blog.faraday.io/how-to-crunch-lots-of-geodata-in-parallel/
     
